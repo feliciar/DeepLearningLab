@@ -12,7 +12,7 @@ function correct = CheckGradients()
 
     X = X - repmat(mean_X, [1, size(X, 2)]);
     
-    hiddenNodes = [50];
+    hiddenNodes = [50, 30];
 
     [W,b] = InitializeParameters(d, K, hiddenNodes);
     [s1, H, P, m, variance] = EvaluateClassifier(X, W, b);
@@ -20,7 +20,6 @@ function correct = CheckGradients()
 
     lambda = 0;
     [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m, variance);
-    size(gradW)
     disp('Computed gradients');
 
     %Checking gradients
@@ -59,6 +58,5 @@ function correct = CheckGradients()
             correct = 0; 
         end
     end
-
 
 end

@@ -12,7 +12,6 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
 %     W2 = W{2};
     n = size(X,2);
 
-
     layers = size(W,1);
     gradb = cell(layers, 1);
     gradW = cell(layers, 1);
@@ -59,10 +58,7 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
 
         gradb{j} = sum(g)'/n;
         gradW{j} = (g'*x')/n + 2*lambda*W{j};
-        
-
-        %Why is g Nan?
-        
+                
         if j > 1
             s = s1{j-1};
             ind = s > 0;

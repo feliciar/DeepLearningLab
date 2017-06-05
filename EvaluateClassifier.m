@@ -37,7 +37,8 @@ function [scores, H, P, mean, variance] = EvaluateClassifier(X, W, b, varargin)
         
 
         mean{j} = mean{j}/N;
-        variance{j} = var(scores{j}, 0, 2) * (N-1)/N; 
+        variance{j} = var(scores{j}, 0, 2) * (N-1)/N; %Verfied
+ 
 
         if size(varargin) > 0
             mean{j} = varargin{1}{j};
@@ -65,5 +66,10 @@ function [scores, H, P, mean, variance] = EvaluateClassifier(X, W, b, varargin)
     
     mean{layers} = mean{layers}/N;
     variance{layers} = var(scores{layers}, 0, 2) * (N-1)/N;
+    
+    if size(varargin) > 0
+        mean{layers} = varargin{1}{layers};
+        variance{layers} = varargin{2}{layers};
+    end
 
 end

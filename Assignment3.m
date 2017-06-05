@@ -1,7 +1,7 @@
 
 [X,Y,y] = LoadBatch('data_batch_1.mat');
 
-subset = 100;
+subset = 200;
 featureSubset = size(X,1);
 
 X = X(1:featureSubset,1:subset);
@@ -34,15 +34,15 @@ K = size(Y,1);
 d = size(X,1);
 N = size(X,2);
 
-n_epochs = 5;
+n_epochs = 1;
 n_batch = 100;
 hiddenNodes = [50];
 [W,b] = InitializeParameters(d, K, hiddenNodes); 
 
 
 
-lambda = 0.000264;
-%lambda = 0;
+%lambda = 0.000264;
+lambda = 0;
 eta = 0.5;
 decayRate = 0.95;
 rho = 0.9;
