@@ -1,4 +1,4 @@
-function [gradW, gradb] = ComputeGradients(X, H, s1, Y, P, W, lambda, mean, variance)
+function [gradW, gradb] = ComputeGradients(X, H, s1, Y, P, W, lambda)
 %• each column of X corresponds to an image and it has size d×n.
 %• each column of Y (K×n) is the one-hot ground truth label for the corresponding
 %   column of X.

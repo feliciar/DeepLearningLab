@@ -14,6 +14,11 @@ function [Wstar, bstar] = MiniBatchGD(X, Y, Xval, Yval, yval, n_batch, eta, n_ep
 
     mom_W = cell(layers, 1);
     mom_b = cell(layers, 1);
+    
+    meanAv = cell(layers,1);
+    varianceAv = cell(layers,1);
+    alpha = 0.99;
+    
     for i=1:layers
         mom_W{i} = zeros(size(W{i}));
         mom_b{i} = zeros(size(b{i}));
@@ -32,18 +37,21 @@ function [Wstar, bstar] = MiniBatchGD(X, Y, Xval, Yval, yval, n_batch, eta, n_ep
             Xbatch = X(:, j_start:j_end);
             Ybatch = Y(:, j_start:j_end);
 
-            
-            [s1, H, P, mean, variance] = EvaluateClassifier(Xbatch, W, b);
-            %Why is s1 NaN?
-            
-            %[grad_W, grad_b] = ComputeGradients(Xbatch, H, s1, Ybatch, P, W, lambda, mean, variance);
-            [grad_W, grad_b] = ComputeGradientsBatchNorm(Xbatch, H, s1, Ybatch, P, W, lambda, mean, variance);
-
+            [s1, H, P, mean, variance, sNorm] = EvaluateClassifier(Xbatch, W, b);
+            [grad_W, grad_b] = ComputeGradientsBatchNorm(Xbatch, H, s1, Ybatch, P, W, lambda, mean, variance, sNorm);
 
             for k=1:layers
 %                 disp(['size mom_b: ', num2str(size(mom_b{k}))]);
 %                 disp(['size grad_b: ', num2str(size(grad_b{k}))]);
-                
+                if k ~=layers
+                    if i == 1 && j == 1
+                        meanAv{k} = mean{k};
+                        varianceAv{k} = variance{k};
+                    end
+                    meanAv{k} = alpha * meanAv{k} + (1-alpha)*mean{k};
+                    varianceAv{k} = alpha * varianceAv{k} + (1-alpha)*variance{k};
+                end
+
                 mom_W{k} = mom_W{k}*rho + eta*grad_W{k};
                 W{k} = W{k} - mom_W{k};
                 mom_b{k} = mom_b{k}*rho + eta*grad_b{k};
@@ -53,8 +61,8 @@ function [Wstar, bstar] = MiniBatchGD(X, Y, Xval, Yval, yval, n_batch, eta, n_ep
         end
 
         eta = eta * decay;
-        %Here W is NaN
-        costTrain(i) = ComputeCost(X, Y, W, b, lambda);
+        costTrain(i) = ComputeCost(X, Y, W, b, lambda, meanAv, varianceAv);
+        %costTrain(i) = ComputeCost(X, Y, W, b, lambda);
 
         if costTrain(i)>3*startCost
             Wstar = W;
@@ -63,8 +71,10 @@ function [Wstar, bstar] = MiniBatchGD(X, Y, Xval, Yval, yval, n_batch, eta, n_ep
             return
         end
 
-        costVal(i) = ComputeCost(Xval, Yval, W, b, lambda);
+        costVal(i) = ComputeCost(Xval, Yval, W, b, lambda, meanAv, varianceAv);
+        %costVal(i) = ComputeCost(Xval, Yval, W, b, lambda);
 
+        
         disp(['epoch: ', num2str(i), '/', num2str(n_epochs), '     Cost: ', num2str(costTrain(i))]);
 
     end

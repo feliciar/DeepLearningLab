@@ -18,9 +18,4 @@ function [W,b] = InitializeParameters(dim, numClasses, hiddenNodes)
         b{i} = zeros(size(W{i},1),1);
     
     end
-
-    
-
-
-
 end

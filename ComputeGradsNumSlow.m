@@ -11,11 +11,10 @@ for j=1:length(b)
         b_try = b;
         b_try{j}(i) = b_try{j}(i) - h;
         c1 = ComputeCost(X, Y, W, b_try, lambda);
-        
+
         b_try = b;
         b_try{j}(i) = b_try{j}(i) + h;
         c2 = ComputeCost(X, Y, W, b_try, lambda);
-        
         grad_b{j}(i) = (c2-c1) / (2*h);
         
     end
@@ -29,11 +28,9 @@ for j=1:length(W)
         W_try = W;
         W_try{j}(i) = W_try{j}(i) - h;
         c1 = ComputeCost(X, Y, W_try, b, lambda);
-    
         W_try = W;
         W_try{j}(i) = W_try{j}(i) + h;
         c2 = ComputeCost(X, Y, W_try, b, lambda);
-    
         grad_W{j}(i) = (c2-c1) / (2*h);
         if mod(i,100) == 0
             disp(['i: ', num2str(i), '/', num2str(numel(W{j}))])

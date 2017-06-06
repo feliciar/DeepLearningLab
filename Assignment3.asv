@@ -1,7 +1,7 @@
 
 [X,Y,y] = LoadBatch('data_batch_1.mat');
 
-subset = size(X,2);
+subset = 200;
 featureSubset = size(X,1);
 
 X = X(1:featureSubset,1:subset);
@@ -43,23 +43,20 @@ hiddenNodes = [50, 30];
 
 lambda = 0.000264;
 %lambda = 0;
-% too big: 1
-% maybe too big:
-% ok: 0.005, 0.01, 0.15, 0.5, 0.8
-% good: 0.1
-% maybe too small:  
-% too small: 0.001
-eta = 0.1;
+% too big: 0.2, 1.
+% ok: 0.1
+% too small: 0.05 ?
+eta = 0.15;
 decayRate = 0.95;
 rho = 0.9;
 
-%[Wstar, bstar] = MiniBatchGD(X, Y, val_X, val_Y, val_y, n_batch, eta, n_epochs, W, b, lambda, rho, decayRate);
+[Wstar, bstar] = MiniBatchGD(X, Y, val_X, val_Y, val_y, n_batch, eta, n_epochs, W, b, lambda, rho, decayRate);
 
 %acc = ComputeAccuracy(val_X, val_y, Wstar, bstar);
 %acc = ComputeAccuracy(test_X, test_y, Wstar, bstar)
 
 %correct = CheckGradients()
-FindParameters(X, Y, val_X, val_Y, val_y);
+%FindParameters(X, Y, val_X, val_Y, val_y);
 
 % [scores, H, P, ~, ~, scoresNorm] = EvaluateClassifier(X, W, b);
 % [gradW, gradb] = ComputeGradients(X, H, scores, Y, P, W, lambda);

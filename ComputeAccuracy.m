@@ -3,7 +3,7 @@ function acc = ComputeAccuracy(X, y, W, b)
 %   that is the percentage of correctly classified 
 %   samples
 
-    [~, ~, P] = EvaluateClassifier(X, W, b);
+    [~, ~, P, ~, ~, ~] = EvaluateClassifier(X, W, b);
     sumCorrect = 0;
     
     for sample=1:size(P,2)

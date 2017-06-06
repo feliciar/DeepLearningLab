@@ -1,4 +1,4 @@
-function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, mean, variance)
+function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, mean, variance, sNorm)
 %• each column of X corresponds to an image and it has size d×n.
 %• each column of Y (K×n) is the one-hot ground truth label for the corresponding
 %   column of X.
@@ -22,11 +22,10 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
         gradb{j} = zeros(size(W{j}, 1), 1);
     end
     
-  
-    m = size(Y,1);
-    g = zeros(n,m); 
+    
+    k = size(Y,1);
+    g = zeros(n,k); 
     for i=1:n
-        
         y = Y(:,i);
         p = P(:,i);
         g(i,:) = - (y'/(y'*p))*(diag(p)-p*p');
@@ -35,10 +34,9 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
     
 
     gradb{layers} = sum(g)'/n;
-
-    gradW{layers} = (g'*H{layers-1}')/n + 2*lambda*W{layers}; %Verfied
+    gradW{layers} = (g'*H{layers-1}')/n + 2*lambda*W{layers};
     
-    s = s1{layers-1};
+    s = sNorm{layers-1};
     ind = s > 0;
     g = g*W{layers};
 
@@ -60,7 +58,7 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
         gradW{j} = (g'*x')/n + 2*lambda*W{j};
                 
         if j > 1
-            s = s1{j-1};
+            s = sNorm{j-1};
             ind = s > 0;
             g = g*W{j};
             for i=1:n

@@ -1,16 +1,16 @@
 function y = FindParameters(X, Y, val_X, val_Y, val_y)
 
-    m = 50; % Number of hidden nodes
+    m = [50, 30]; 
     K = size(Y,1);
     d = size(X,1);
 
-    n_epochs = 10;
+    n_epochs = 7;
     n_batch = 100;
     decayRate = 0.95;
     rho = 0.9;
 
-    e_min = -1.8;
-    e_max = -1.3;
+    e_min = -3;
+    e_max = 0;
 
     el_min = -9;
     el_max = -2;

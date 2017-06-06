@@ -2,25 +2,28 @@ function correct = CheckGradients()
 
     [X,Y,~] = LoadBatch('data_batch_1.mat');
 
-    N = 3;
+    N = 10;
     d = 100;
-    K = size(Y,1);
+    K = 10;
 
     X = X(1:d,1:N);
-    Y = Y(:,1:N);
+    %Y = Y(2:K+1,5:N+4);
+    Y = Y(1:K,1:N);
+
     mean_X = mean(X, 2);
 
     X = X - repmat(mean_X, [1, size(X, 2)]);
     
-    hiddenNodes = [50, 30];
+    hiddenNodes = [50];
 
     [W,b] = InitializeParameters(d, K, hiddenNodes);
-    [s1, H, P, m, variance] = EvaluateClassifier(X, W, b);
+    [s1, H, P, m, variance, scoresNorm] = EvaluateClassifier(X, W, b);
     correct = 1;
 
     lambda = 0;
-    [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m, variance);
+    [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m, variance, scoresNorm);
     disp('Computed gradients');
+
 
     %Checking gradients
     [gradb_num, gradW_num] = ComputeGradsNumSlow(X, Y, W, b, lambda, 1e-5);
