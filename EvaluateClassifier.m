@@ -6,6 +6,11 @@ function [scores, H, P, mean, variance, scoresNorm] = EvaluateClassifier(X, W, b
 %       for the image. P has size K*N
 %   Sending in mean and variance causes the function to use
 %   those values instead of the computed ones.
+% Return: 
+%   H contains X[2...l] (has size l-1)
+%   scores contains the unnormalized scores of size lx1 x mxn
+%   scoresNorm only contains the normalized scores for layers 1..l-1
+%   the same goes for mean  and variance
     layers = size(W,1);
     
     scores = cell(layers, 1);
@@ -32,7 +37,8 @@ function [scores, H, P, mean, variance, scoresNorm] = EvaluateClassifier(X, W, b
         scores{j} = zeros(M, N);
         mean{j} = zeros(M, 1);
         
-        for i=1:N
+        % Calculate scores for the entire batch, one input at a time
+        for i=1:N 
             scores{j}(:,i) = W{j}*h(:,i) + b{j};
             % mean is mean of all inputs, a column vector where each entry
             % is the average input for that feature
@@ -49,11 +55,12 @@ function [scores, H, P, mean, variance, scoresNorm] = EvaluateClassifier(X, W, b
         end
         %disp(['Scores: ', num2str(size(scores{j})), '. mean: ', num2str(size(mean{j})) , '. var: ', num2str(size(variance{j}))]);
         
+        % Batch normalize each input in the batch, one at a time
         for i=1:N
             scoresNorm{j}(:,i) = BatchNormalize(scores{j}(:,i), mean{j}, variance{j}); %Verfied
         end
 
-       
+        % Calculate activation function for the entire batch
         H{j} = max(scoresNorm{j}, 0);
         
     end
