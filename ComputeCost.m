@@ -19,9 +19,10 @@ function [J] = ComputeCost(X, Y, W, b, lambda, varargin)
     end
     s = s / N;
     
-    sumR = 0; 
-    for i=1:size(W,1)
-        sumR = sumR + sum(diag(W{i}.^2));
+    sumR = 0;
+    for l=1:size(W,1)
+        sumR = sumR + sum(diag(W{l}.^2));
+        %sumR = sumR + sum(sum(W{l}.^2)); %Other measure
     end
     
     J = s + lambda*sumR;
