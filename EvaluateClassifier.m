@@ -1,8 +1,11 @@
 function [scores, H, P, mean, variance, scoresNorm] = EvaluateClassifier(X, W, b, varargin)
-%Evaluates the classifier by calculating the score 
+%Evaluates the classifier for a mini-batch
+%   by calculating the score 
 %   and softmax
 %   each column of P contains the probability of each label
 %       for the image. P has size K*N
+%   Sending in mean and variance causes the function to use
+%   those values instead of the computed ones.
     layers = size(W,1);
     
     scores = cell(layers, 1);
@@ -31,11 +34,13 @@ function [scores, H, P, mean, variance, scoresNorm] = EvaluateClassifier(X, W, b
         
         for i=1:N
             scores{j}(:,i) = W{j}*h(:,i) + b{j};
-            mean{j} = mean{j} + scores{j}(:,i);
+            % mean is mean of all inputs, a column vector where each entry
+            % is the average input for that feature
+            mean{j} = mean{j} + scores{j}(:,i); 
         end
         
         mean{j} = mean{j}/N;
-        variance{j} = var(scores{j}, 0, 2) * (N-1)/N; %Verfied
+        variance{j} = var(scores{j}, 0, 2) * (N-1)/N;
  
         
         if size(varargin) > 0

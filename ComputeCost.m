@@ -18,7 +18,7 @@ function [J] = ComputeCost(X, Y, W, b, lambda, varargin)
         s = s + cross;
     end
     s = s / N;
-
+    
     sumR = 0; 
     for i=1:size(W,1)
         sumR = sumR + sum(diag(W{i}.^2));
