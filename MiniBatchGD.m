@@ -30,7 +30,6 @@ function [Wstar, bstar] = MiniBatchGD(X, Y, Xval, Yval, yval, n_batch, eta, n_ep
     startCost = ComputeCost(X, Y, W, b, lambda);
     disp(['startcost: ', num2str(startCost)]);
     for i=1:n_epochs
-
         for j=1:N/n_batch
             j_start = (j-1)*n_batch + 1;
             j_end = j*n_batch;
@@ -74,9 +73,13 @@ function [Wstar, bstar] = MiniBatchGD(X, Y, Xval, Yval, yval, n_batch, eta, n_ep
         costVal(i) = ComputeCost(Xval, Yval, W, b, lambda, meanAv, varianceAv);
         %costVal(i) = ComputeCost(Xval, Yval, W, b, lambda);
 
-        
         disp(['epoch: ', num2str(i), '/', num2str(n_epochs), '     Cost: ', num2str(costTrain(i))]);
-
+        
+        hold on
+        plot(1:i, costTrain(1:i), 1:i, costVal(1:i));
+        title(['Cost. lambda: ', num2str(lambda), ' rho: ', num2str(rho), ', eta: ', num2str(startEta), ' decay: ', num2str(decay)]);
+       
+        drawnow
     end
     Wstar = W;
     bstar = b;
@@ -86,7 +89,7 @@ function [Wstar, bstar] = MiniBatchGD(X, Y, Xval, Yval, yval, n_batch, eta, n_ep
     xlabel('Epochs')
     ylabel('Cost')
     legend('training data', 'validation data')
-
+    hold off
     acc = ComputeAccuracy(Xval, yval, W, b)
 
 end

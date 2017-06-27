@@ -32,8 +32,7 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
     end
     
     
-
-    gradb{layers} = sum(g)'/n;
+    gradb{layers} = sum(g)'/n; % Sum of each column, correct
     gradW{layers} = (g'*H{layers-1}')/n + 2*lambda*W{layers};
     
     s = sNorm{layers-1};
@@ -55,6 +54,7 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
         end
 
         gradb{j} = sum(g)'/n;
+        
         gradW{j} = (g'*x')/n + 2*lambda*W{j};
                 
         if j > 1

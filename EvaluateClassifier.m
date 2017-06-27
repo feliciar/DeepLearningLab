@@ -47,12 +47,13 @@ function [scores, H, P, mean, variance, scoresNorm] = EvaluateClassifier(X, W, b
         
         mean{j} = mean{j}/N;
         variance{j} = var(scores{j}, 0, 2) * (N-1)/N;
- 
+        
         
         if size(varargin) > 0
-            mean{j} = varargin{1}{1}{j};
-            variance{j} = varargin{1}{2}{j};
+            mean{j} = varargin{1}{j};
+            variance{j} = varargin{2}{j};
         end
+        
         %disp(['Scores: ', num2str(size(scores{j})), '. mean: ', num2str(size(mean{j})) , '. var: ', num2str(size(variance{j}))]);
         
         % Batch normalize each input in the batch, one at a time

@@ -4,7 +4,7 @@ function [s] = BatchNormalize(s, mean, variance)
 % calculated from one batch
     eta = 0.00001;
     s = (diag(variance + eta))^(-1/2)*(s-mean);
-    if any(isnan(s))
+    if any(isnan(s)) || any(isinf(s))
         disp('s was NaN in BatchNormalize!')
     end
 end

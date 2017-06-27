@@ -14,7 +14,7 @@ function correct = CheckGradients()
 
     X = X - repmat(mean_X, [1, size(X, 2)]);
     
-    hiddenNodes = [50];
+    hiddenNodes = [50, 30, 30];
 
     [W,b] = InitializeParameters(d, K, hiddenNodes);
     [s1, H, P, m, variance, scoresNorm] = EvaluateClassifier(X, W, b);
@@ -34,9 +34,12 @@ function correct = CheckGradients()
         gn = gradW_num{i};
 
         relativeError = sqrt(sum(sum((ga - gn).^2))) / max(0.001, sum(sum(ga)) + sum(sum(gn)));
-        disp(['Relative error: ', num2str(relativeError)]);
         maxDiff = max(max(abs(ga - gn)));
-        disp(['max difference: ', num2str(maxDiff)]);
+        disp('max difference,    Relative error ');
+        sprintf('%e \t %e', [maxDiff, relativeError])
+        
+        
+        disp(['max value: ', num2str(max(max(ga)))]);
         if relativeError > 10E-4
             correct = 0; 
         end
@@ -51,9 +54,9 @@ function correct = CheckGradients()
         gn = gradb_num{i};
 
         relativeError = sqrt(sum(sum((ga - gn).^2))) / max(0.001, sum(sum(ga)) + sum(sum(gn)));
-        disp(['Relative error: ', num2str(relativeError)]);
         maxDiff = max(max(abs(ga - gn)));
-        disp(['max difference: ', num2str(maxDiff)]);
+        disp('max difference,    Relative error ');
+        sprintf('%e \t %e', [maxDiff, relativeError])
         if relativeError > 10E-4
             correct = 0; 
         end

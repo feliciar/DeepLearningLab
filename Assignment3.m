@@ -39,12 +39,20 @@ n_batch = 100;
 hiddenNodes = [50, 30];
 [W,b] = InitializeParameters(d, K, hiddenNodes); 
 
-% lambda: 
-% maybe too small: 
+% lambda (when eta=0.05): 
+% too small: 0.0001
+% maybe too small: 0.001
 % good: 
-% too large: 
-lambda = 0.0001;
-eta = 0.05;
+% too large: 0.01
+
+% lambda (when eta=0.1): 
+% too small: 0.0001
+% maybe too small: 0.001
+% good: 
+% too large: 0.01
+
+lambda = 0.01;
+eta = 0.1;
 decayRate = 0.95;
 rho = 0.9;
 

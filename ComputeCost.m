@@ -7,7 +7,7 @@ function [J] = ComputeCost(X, Y, W, b, lambda, varargin)
     if size(varargin,1) == 0
         [~, ~, P, ~, ~, ~] = EvaluateClassifier(X, W, b);
     else
-        [~, ~, P, ~, ~, ~] = EvaluateClassifier(X, W, b, varargin);
+        [~, ~, P, ~, ~, ~] = EvaluateClassifier(X, W, b, varargin{1}, varargin{2});
     end
     s = 0;
     
