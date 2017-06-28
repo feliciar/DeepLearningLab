@@ -5,6 +5,7 @@ function [Wstar, bstar] = MiniBatchGD(X, Y, Xval, Yval, yval, n_batch, eta, n_ep
 %   W and b initial values
 %   lambda regularization factor in the cost function
 %   GDparams contains n_batch, eta and n_epochs
+
     N = size(X,2);
 
     costTrain = zeros(1, n_epochs);
@@ -60,8 +61,8 @@ function [Wstar, bstar] = MiniBatchGD(X, Y, Xval, Yval, yval, n_batch, eta, n_ep
         end
 
         eta = eta * decay;
-        costTrain(i) = ComputeCost(X, Y, W, b, lambda, meanAv, varianceAv);
-        %costTrain(i) = ComputeCost(X, Y, W, b, lambda);
+        %costTrain(i) = ComputeCost(X, Y, W, b, lambda, meanAv, varianceAv);
+        costTrain(i) = ComputeCost(X, Y, W, b, lambda);
 
         if costTrain(i)>3*startCost
             Wstar = W;

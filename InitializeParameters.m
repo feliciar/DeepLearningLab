@@ -5,13 +5,13 @@ function [W,b] = InitializeParameters(dim, numClasses, hiddenNodes)
     b = cell(numLayers, 1);
     
     
-    W{1} = randn(hiddenNodes(1), dim)*0.1;
+    W{1} = randn(hiddenNodes(1), dim)*0.001;
     for i=2:numLayers-1
-        W{i} = randn(hiddenNodes(i), hiddenNodes(i-1))*0.1;
+        W{i} = randn(hiddenNodes(i), hiddenNodes(i-1))*0.001;
     end
     
 
-    W{numLayers} = randn(numClasses, hiddenNodes(numLayers-1))*0.1;
+    W{numLayers} = randn(numClasses, hiddenNodes(numLayers-1))*0.001;
   
 
     for i=1:numLayers

@@ -10,6 +10,7 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
 %• grad_b2 has size k x 1
 %     W1 = W{1};
 %     W2 = W{2};
+    global BATCH_NORMALIZATION;
     n = size(X,2);
 
     layers = size(W,1);
@@ -35,7 +36,11 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
     gradb{layers} = sum(g)'/n; % Sum of each column, correct
     gradW{layers} = (g'*H{layers-1}')/n + 2*lambda*W{layers};
     
-    s = sNorm{layers-1};
+    if BATCH_NORMALIZATION
+        s = sNorm{layers-1};
+    else 
+        s = s1{layers-1};
+    end
     ind = s > 0;
     g = g*W{layers};
 
@@ -44,9 +49,9 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
     end
     
     for j = layers-1:-1:1
-        
-        g = BatchNormBackPass(g, s1{j}, mean{j}, variance{j});
-
+        if BATCH_NORMALIZATION
+            g = BatchNormBackPass(g, s1{j}, mean{j}, variance{j});
+        end
         if j == 1
             x = X;
         else
@@ -58,7 +63,11 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
         gradW{j} = (g'*x')/n + 2*lambda*W{j};
                 
         if j > 1
-            s = sNorm{j-1};
+            if BATCH_NORMALIZATION
+                s = sNorm{j-1};
+            else 
+                s = s1{j-1};
+            end
             ind = s > 0;
             g = g*W{j};
             for i=1:n

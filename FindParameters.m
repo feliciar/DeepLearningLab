@@ -4,21 +4,21 @@ function y = FindParameters(X, Y, val_X, val_Y, val_y)
     K = size(Y,1);
     d = size(X,1);
 
-    n_epochs = 10;
+    n_epochs = 5;
     n_batch = 100;
     decayRate = 0.95;
     rho = 0.9;
 
-    e_min = -2.2;
-    e_max = -0.7;
+    e_min = -3;
+    e_max = 0;
 
-    el_min = -9;
-    el_max = -3;
+    el_min = -6;
+    el_max = -1;
 
     fileID = fopen('test.txt','a');
     fprintf(fileID,'%8s\t%11s\t%8s\t%8s\n','eta', 'lambda', 'accuracy', 'average acc');
 
-    tries = 25;
+    tries = 100;
     el = el_min + (el_max - el_min) * rand(tries,1);
     lambdas = 10.^el;
 

@@ -34,35 +34,26 @@ K = size(Y,1);
 d = size(X,1);
 N = size(X,2);
 
-n_epochs = 10;
+n_epochs = 5;
 n_batch = 100;
 hiddenNodes = [50, 30];
 [W,b] = InitializeParameters(d, K, hiddenNodes); 
 
-% lambda (when eta=0.05): 
-% too small: 0.0001
-% maybe too small: 0.001
-% good: 
-% too large: 0.01
-
-% lambda (when eta=0.1): 
-% too small: 0.0001
-% maybe too small: 0.001
-% good: 
-% too large: 0.01
-
-lambda = 0.01;
-eta = 0.1;
+lambda = 0.000001;
+eta = 0.001;
 decayRate = 0.95;
 rho = 0.9;
 
-[Wstar, bstar] = MiniBatchGD(X, Y, val_X, val_Y, val_y, n_batch, eta, n_epochs, W, b, lambda, rho, decayRate);
+global BATCH_NORMALIZATION;
+BATCH_NORMALIZATION = 1;
+
+%[Wstar, bstar] = MiniBatchGD(X, Y, val_X, val_Y, val_y, n_batch, eta, n_epochs, W, b, lambda, rho, decayRate);
 
 %acc = ComputeAccuracy(val_X, val_y, Wstar, bstar);
 %acc = ComputeAccuracy(test_X, test_y, Wstar, bstar)
 
 %correct = CheckGradients()
-%FindParameters(X, Y, val_X, val_Y, val_y);
+FindParameters(X, Y, val_X, val_Y, val_y);
 
 % [scores, H, P, ~, ~, scoresNorm] = EvaluateClassifier(X, W, b);
 % [gradW, gradb] = ComputeGradients(X, H, scores, Y, P, W, lambda);

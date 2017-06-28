@@ -1,1 +1,3 @@
      eta	     lambda	accuracy	average acc
+     eta	     lambda	accuracy	average acc
+0.028865	0.0000017483	0.426100	0.426100

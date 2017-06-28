@@ -11,6 +11,7 @@ function [scores, H, P, mean, variance, scoresNorm] = EvaluateClassifier(X, W, b
 %   scores contains the unnormalized scores of size lx1 x mxn
 %   scoresNorm only contains the normalized scores for layers 1..l-1
 %   the same goes for mean  and variance
+    global BATCH_NORMALIZATION;
     layers = size(W,1);
     
     scores = cell(layers, 1);
@@ -48,7 +49,6 @@ function [scores, H, P, mean, variance, scoresNorm] = EvaluateClassifier(X, W, b
         mean{j} = mean{j}/N;
         variance{j} = var(scores{j}, 0, 2) * (N-1)/N;
         
-        
         if size(varargin) > 0
             mean{j} = varargin{1}{j};
             variance{j} = varargin{2}{j};
@@ -57,12 +57,18 @@ function [scores, H, P, mean, variance, scoresNorm] = EvaluateClassifier(X, W, b
         %disp(['Scores: ', num2str(size(scores{j})), '. mean: ', num2str(size(mean{j})) , '. var: ', num2str(size(variance{j}))]);
         
         % Batch normalize each input in the batch, one at a time
-        for i=1:N
-            scoresNorm{j}(:,i) = BatchNormalize(scores{j}(:,i), mean{j}, variance{j}); %Verfied
+        if BATCH_NORMALIZATION
+            for i=1:N
+                scoresNorm{j}(:,i) = BatchNormalize(scores{j}(:,i), mean{j}, variance{j}); %Verfied
+            end
         end
 
         % Calculate activation function for the entire batch
-        H{j} = max(scoresNorm{j}, 0);
+        if BATCH_NORMALIZATION
+            H{j} = max(scoresNorm{j}, 0);
+        else
+            H{j} = max(scores{j}, 0);
+        end
         
     end
     
