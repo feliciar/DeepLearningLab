@@ -7,7 +7,6 @@ function correct = CheckGradients()
     K = 10;
 
     X = X(1:d,1:N);
-    %Y = Y(2:K+1,5:N+4);
     Y = Y(1:K,1:N);
 
     mean_X = mean(X, 2);

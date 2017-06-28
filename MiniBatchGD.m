@@ -41,8 +41,6 @@ function [Wstar, bstar] = MiniBatchGD(X, Y, Xval, Yval, yval, n_batch, eta, n_ep
             [grad_W, grad_b] = ComputeGradientsBatchNorm(Xbatch, H, s1, Ybatch, P, W, lambda, mean, variance, sNorm);
 
             for k=1:layers
-%                 disp(['size mom_b: ', num2str(size(mom_b{k}))]);
-%                 disp(['size grad_b: ', num2str(size(grad_b{k}))]);
                 if k ~=layers
                     if i == 1 && j == 1
                         meanAv{k} = mean{k};
@@ -61,7 +59,6 @@ function [Wstar, bstar] = MiniBatchGD(X, Y, Xval, Yval, yval, n_batch, eta, n_ep
         end
 
         eta = eta * decay;
-        %costTrain(i) = ComputeCost(X, Y, W, b, lambda, meanAv, varianceAv);
         costTrain(i) = ComputeCost(X, Y, W, b, lambda);
 
         if costTrain(i)>3*startCost
@@ -70,17 +67,15 @@ function [Wstar, bstar] = MiniBatchGD(X, Y, Xval, Yval, yval, n_batch, eta, n_ep
             disp(['Cost was to big: ', num2str(costTrain(i)), ' while start cost was: ', num2str(startCost)])
             return
         end
-
-        costVal(i) = ComputeCost(Xval, Yval, W, b, lambda, meanAv, varianceAv);
-        %costVal(i) = ComputeCost(Xval, Yval, W, b, lambda);
-
         disp(['epoch: ', num2str(i), '/', num2str(n_epochs), '     Cost: ', num2str(costTrain(i))]);
+        costVal(i) = ComputeCost(Xval, Yval, W, b, lambda, meanAv, varianceAv);
         
         hold on
         plot(1:i, costTrain(1:i), 1:i, costVal(1:i));
         title(['Cost. lambda: ', num2str(lambda), ' rho: ', num2str(rho), ', eta: ', num2str(startEta), ' decay: ', num2str(decay)]);
        
         drawnow
+        
     end
     Wstar = W;
     bstar = b;

@@ -8,8 +8,6 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
 %• grad_W2 has size k x m
 %• grad_b1 has size m x 1
 %• grad_b2 has size k x 1
-%     W1 = W{1};
-%     W2 = W{2};
     global BATCH_NORMALIZATION;
     n = size(X,2);
 
@@ -17,12 +15,10 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
     gradb = cell(layers, 1);
     gradW = cell(layers, 1);
        
-    
     for j = 1:layers
         gradW{j} = zeros(size(W{j}));
         gradb{j} = zeros(size(W{j}, 1), 1);
     end
-    
     
     k = size(Y,1);
     g = zeros(n,k); 
@@ -32,8 +28,7 @@ function [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m
         g(i,:) = - (y'/(y'*p))*(diag(p)-p*p');
     end
     
-    
-    gradb{layers} = sum(g)'/n; % Sum of each column, correct
+    gradb{layers} = sum(g)'/n;
     gradW{layers} = (g'*H{layers-1}')/n + 2*lambda*W{layers};
     
     if BATCH_NORMALIZATION

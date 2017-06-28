@@ -10,10 +10,8 @@ function [W,b] = InitializeParameters(dim, numClasses, hiddenNodes)
         W{i} = randn(hiddenNodes(i), hiddenNodes(i-1))*0.001;
     end
     
-
     W{numLayers} = randn(numClasses, hiddenNodes(numLayers-1))*0.001;
-  
-
+ 
     for i=1:numLayers
         b{i} = zeros(size(W{i},1),1);
     

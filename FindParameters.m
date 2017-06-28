@@ -4,16 +4,16 @@ function y = FindParameters(X, Y, val_X, val_Y, val_y)
     K = size(Y,1);
     d = size(X,1);
 
-    n_epochs = 5;
+    n_epochs = 10;
     n_batch = 100;
     decayRate = 0.95;
     rho = 0.9;
 
     e_min = -3;
-    e_max = 0;
+    e_max = -1;
 
     el_min = -6;
-    el_max = -1;
+    el_max = -2;
 
     fileID = fopen('test.txt','a');
     fprintf(fileID,'%8s\t%11s\t%8s\t%8s\n','eta', 'lambda', 'accuracy', 'average acc');
@@ -45,8 +45,6 @@ function y = FindParameters(X, Y, val_X, val_Y, val_y)
         averageAcc = averageAcc / iterations;
         disp(['i: ', num2str(i)]);
         A = [eta, lambda, bestAcc, averageAcc]
-
-
 
         fprintf(fileID,'%0.6f\t%0.10f\t%0.6f\t%1.6f\n',A);
         format shortg
