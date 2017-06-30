@@ -46,9 +46,12 @@ x0 = zeros(K,1);
 
 % Test synthesize
 n = 10;
-Y = Synthesize(x0, h0, RNN, n);
+Y2 = Synthesize(x0, h0, RNN, n);
 chars = '';
 for i=1:n
-    chars(i) = index_to_char(find(Y(:,i),1));
+    chars(i) = index_to_char(find(Y2(:,i),1));
 end
 disp(chars)
+
+% Test forward pass
+L = ForwardPass(X,Y,h0,RNN,seq_length)
