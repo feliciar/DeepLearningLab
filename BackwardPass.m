@@ -22,6 +22,7 @@ function grads = BackwardPass (A, H, X, Y, P, RNN)
         a = A(:,i);
         grada(i,:) = gradh(i,:)*diag(1-(tanh(a)).^2);
     end
+    grads.c = sum(g)';
     
     g = grada;
     grads.W = zeros(size(RNN.W));
@@ -30,7 +31,7 @@ function grads = BackwardPass (A, H, X, Y, P, RNN)
     end
     
     grads.U = g'*X';
-    
+    grads.b = sum(g)';
     % TODO calculate gradb
     
     % TODO calculate gradc
