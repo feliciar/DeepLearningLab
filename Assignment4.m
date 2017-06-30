@@ -54,4 +54,7 @@ end
 disp(chars)
 
 % Test forward pass
-L = ForwardPass(X,Y,h0,RNN,seq_length)
+[L, P, H] = ForwardPass(X,Y,h0,RNN,seq_length);
+
+% Test backward pass
+BackwardPass (H, Y, P, RNN);
