@@ -13,12 +13,12 @@ K = size(book_chars, 2);
 % (list of all characters), and index to characters. 
 char_to_index = containers.Map('KeyType','char','ValueType','int32');
 index_to_char = containers.Map('KeyType','int32','ValueType','char');
-
 for i=1:K
     char_to_index(book_chars(1,i)) = i;
     index_to_char(i) = book_chars(1,i);
 end
 
+% Network hyper-parameters
 m = 100; % Dimensionality of the hidden state
 eta = 0.1;
 seq_length = 25; % Length of the input sequence used during training
@@ -26,6 +26,7 @@ seq_length = 25; % Length of the input sequence used during training
 sig = 0.01;
 RNN = init(RNN,m,K,sig); % Init and put data in RNN
 
+% Test
 X_chars = book_data(1:seq_length);
 Y_chars = book_data(2:seq_length+1);
 
@@ -41,3 +42,13 @@ for i=1:seq_length
 end
 
 h0 = zeros(m,1);
+x0 = zeros(K,1);
+
+% Test synthesize
+n = 10;
+Y = Synthesize(x0, h0, RNN, n);
+chars = '';
+for i=1:n
+    chars(i) = index_to_char(find(Y(:,i),1));
+end
+disp(chars)
