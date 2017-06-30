@@ -1,44 +1,48 @@
-function correct = CheckGradients()
+function correct = CheckGradients(book_data, book_chars, char_to_index, RNN)
 
-    [X,Y,~] = LoadBatch('data_batch_1.mat');
-
-    N = 10;
-    d = 100;
-    K = 10;
-
-    X = X(1:d,1:N);
-    Y = Y(1:K,1:N);
-
-    mean_X = mean(X, 2);
-
-    X = X - repmat(mean_X, [1, size(X, 2)]);
+    % Network hyper-parameters
+    m = 5; % Dimensionality of the hidden state
+    seq_length = 25; % Length of the input sequence used during training
+    K = size(book_chars, 2);
+    sig = 0.01;
+    RNN = init(RNN,m,K,sig);
     
-    hiddenNodes = [50, 30, 30];
+    X_chars = book_data(1:seq_length);
+    Y_chars = book_data(2:seq_length+1);
+    
+    % X first column contains the onehot representation of the first input char
+    X = zeros(K, seq_length);
+    Y = zeros(K, seq_length);
+    for i=1:seq_length
+        index = char_to_index(X_chars(i)); % Index of this input character
+        X(index,i) = 1;
 
-    [W,b] = InitializeParameters(d, K, hiddenNodes);
-    [s1, H, P, m, variance, scoresNorm] = EvaluateClassifier(X, W, b);
+        index = char_to_index(Y_chars(i)); % Index of this input character
+        Y(index,i) = 1;
+    end
+
+    h0 = zeros(m,1);
+    [~, A, H, P] = ForwardPass(X,Y,h0,RNN,seq_length);
+
+    grads = BackwardPass (A, H, X, Y, P, RNN);
+
+    num_grads = ComputeGradsNum(X, Y, RNN, 1e-4);
+    max(max(grads.U-num_grads.U))
+    
     correct = 1;
 
-    lambda = 0;
-    [gradW, gradb] = ComputeGradientsBatchNorm(X, H, s1, Y, P, W, lambda, m, variance, scoresNorm);
-    disp('Computed gradients');
-
-
-    %Checking gradients
-    [gradb_num, gradW_num] = ComputeGradsNumSlow(X, Y, W, b, lambda, 1e-5);
-
-    for i=1:size(gradW,1)
-        disp(['W', num2str(i), ' grad: ']);
-        ga = gradW{i};
-        gn = gradW_num{i};
+    for f = fieldnames(RNN)'
+        ga = grads.(f{1});
+        gn = num_grads.(f{1});
+        
+        disp([f{1}, ' grad: ']);
 
         relativeError = sqrt(sum(sum((ga - gn).^2))) / max(0.001, sum(sum(ga)) + sum(sum(gn)));
         maxDiff = max(max(abs(ga - gn)));
         disp('max difference,    Relative error ');
-        sprintf('%e \t %e', [maxDiff, relativeError])
-        
-        
-        disp(['max value: ', num2str(max(max(ga)))]);
+        fprintf('%e \t %e \n', [maxDiff, relativeError]);
+
+
         if relativeError > 10E-4
             correct = 0; 
         end
@@ -46,22 +50,4 @@ function correct = CheckGradients()
             correct = 0; 
         end
     end
-
-    for i=1:size(gradb,1)
-        disp(['b', num2str(i), ' grad: ']);
-        ga = gradb{i};
-        gn = gradb_num{i};
-
-        relativeError = sqrt(sum(sum((ga - gn).^2))) / max(0.001, sum(sum(ga)) + sum(sum(gn)));
-        maxDiff = max(max(abs(ga - gn)));
-        disp('max difference,    Relative error ');
-        sprintf('%e \t %e', [maxDiff, relativeError])
-        if relativeError > 10E-4
-            correct = 0; 
-        end
-        if maxDiff > 10E-6
-            correct = 0; 
-        end
-    end
-
 end

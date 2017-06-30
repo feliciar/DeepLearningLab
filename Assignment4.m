@@ -57,4 +57,7 @@ disp(chars)
 [L, A, H, P] = ForwardPass(X,Y,h0,RNN,seq_length);
 
 % Test backward pass
-BackwardPass (A, H, X, Y, P, RNN);
+grads = BackwardPass (A, H, X, Y, P, RNN);
+
+RNN2 = RNN;
+CheckGradients(book_data, book_chars, char_to_index, RNN2)

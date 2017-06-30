@@ -1,6 +1,6 @@
 %   P size Kxt
 %   H size mxt
-function BackwardPass (A, H, X, Y, P, RNN)
+function grads = BackwardPass (A, H, X, Y, P, RNN)
     grads = RNN;
     t = size(H,2);
     m = size(H,1);
@@ -30,4 +30,8 @@ function BackwardPass (A, H, X, Y, P, RNN)
     end
     
     grads.U = g'*X';
+    
+    % TODO calculate gradb
+    
+    % TODO calculate gradc
 end
