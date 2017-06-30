@@ -20,7 +20,6 @@ end
 
 % Network hyper-parameters
 m = 100; % Dimensionality of the hidden state
-eta = 0.1;
 seq_length = 25; % Length of the input sequence used during training
 
 sig = 0.01;
@@ -44,20 +43,8 @@ end
 h0 = zeros(m,1);
 x0 = zeros(K,1);
 
-% Test synthesize
-n = 10;
-Y2 = Synthesize(x0, h0, RNN, n);
-chars = '';
-for i=1:n
-    chars(i) = index_to_char(find(Y2(:,i),1));
-end
-disp(chars)
 
-% Test forward pass
-[L, A, H, P] = ForwardPass(X,Y,h0,RNN,seq_length);
+Train(book_data, book_chars, char_to_index, index_to_char, RNN);
 
-% Test backward pass
-grads = BackwardPass (A, H, X, Y, P, RNN);
-
-RNN2 = RNN;
-CheckGradients(book_data, book_chars, char_to_index, RNN2)
+%RNN2 = RNN;
+%CheckGradients(book_data, book_chars, char_to_index, RNN2)
