@@ -6,6 +6,8 @@
 %   RNN, the parameters of the network
 % Returns
 %   L the loss
+%   P size Kxt
+%   H size mxt
 function [L, P, H] = ForwardPass(X, Y, h, RNN, t)
     H = zeros(size(h,1),t);
     P = zeros(size(X));
