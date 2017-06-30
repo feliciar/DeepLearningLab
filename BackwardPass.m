@@ -32,7 +32,9 @@ function grads = BackwardPass (A, H, X, Y, P, RNN)
     
     grads.U = g'*X';
     grads.b = sum(g)';
-    % TODO calculate gradb
     
-    % TODO calculate gradc
+    % Clip gradients
+    for f = fieldnames(grads)'
+        grads.(f{1}) = max(min(grads.(f{1}), 5), -5);
+    end
 end
