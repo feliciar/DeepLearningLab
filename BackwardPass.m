@@ -1,6 +1,6 @@
 %   P size Kxt
 %   H size mxt
-function BackwardPass (A, H, Y, P, RNN)
+function BackwardPass (A, H, X, Y, P, RNN)
     t = size(H,2);
     m = size(H,1);
     % gt is the derivate of L in respect of o
@@ -27,4 +27,7 @@ function BackwardPass (A, H, Y, P, RNN)
     for i=2:t
         gradW = gradW + g(i,:)'*H(:,i-1)';
     end
+    
+    gradU = g'*X';
+
 end
