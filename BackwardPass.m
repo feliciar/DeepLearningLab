@@ -1,11 +1,12 @@
 %   P size Kxt
 %   H size mxt
 function BackwardPass (A, H, X, Y, P, RNN)
+    grads = RNN;
     t = size(H,2);
     m = size(H,1);
     % gt is the derivate of L in respect of o
     g = -(Y-P)'; 
-    gradV = g'*H';
+    grads.V = g'*H';
     
     grado = g;
     % gradient of L with respect to ht. Size txm
@@ -23,11 +24,10 @@ function BackwardPass (A, H, X, Y, P, RNN)
     end
     
     g = grada;
-    gradW = zeros(size(RNN.W));
+    grads.W = zeros(size(RNN.W));
     for i=2:t
-        gradW = gradW + g(i,:)'*H(:,i-1)';
+        grads.W = grads.W + g(i,:)'*H(:,i-1)';
     end
     
-    gradU = g'*X';
-
+    grads.U = g'*X';
 end
