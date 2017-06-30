@@ -4,7 +4,8 @@ function Train (book_data, book_chars, char_to_index, index_to_char, RNN)
     K = size(book_chars, 2);
     m = size(RNN.b,1);
     
-    
+    iter = 100000;
+    loss = zeros(iter,1);
     smooth_loss = -1;
     hprev = zeros(m,1);
     
@@ -12,7 +13,7 @@ function Train (book_data, book_chars, char_to_index, index_to_char, RNN)
     
     e = 1;
     epoch = 1;
-    for i=1:4000000
+    for i=1:iter
     
     
         X_chars = book_data(e : e + seq_length - 1);
@@ -45,6 +46,7 @@ function Train (book_data, book_chars, char_to_index, index_to_char, RNN)
         else
             smooth_loss = 0.999 * smooth_loss + 0.001*L;
         end
+        loss(i,:) = smooth_loss;
         if mod(i,100) == 0
             disp(['i: ', num2str(i), ' epoch: ', num2str(epoch), ' loss: ', num2str(smooth_loss)])
         end
@@ -65,6 +67,14 @@ function Train (book_data, book_chars, char_to_index, index_to_char, RNN)
             e = 1;
             epoch = epoch + 1;
             hprev = zeros(m,1);
+        end
+        
+        if epoch == 3
+            plot(1:i, loss(1:i,:));
+            title('Smooth loss for an RNN network');
+            xlabel('Iterations')
+            ylabel('Smooth loss')
+            return;
         end
     end
 end
