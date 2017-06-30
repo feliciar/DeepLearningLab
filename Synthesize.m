@@ -8,7 +8,7 @@ function Y = Synthesize(x0, h0, RNN, n)
     x = x0;
     h = h0;
     for i=1:n
-        [h, p] = SingleForwardPass(x, h, RNN);
+        [~, h, p] = SingleForwardPass(x, h, RNN);
         
         % Find the first index which is bigger than some
         % a in [0,1]

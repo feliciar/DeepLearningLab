@@ -6,7 +6,7 @@
 % Returns
 %   h next hidden state
 %   p probability in this timestep, size Kx1
-function [h, p] = SingleForwardPass (x, h, RNN)
+function [a, h, p] = SingleForwardPass (x, h, RNN)
     a = RNN.W*h + RNN.U*x + RNN.b;
     h = tanh(a);
     o = RNN.V*h + RNN.c;
