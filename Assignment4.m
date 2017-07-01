@@ -44,7 +44,7 @@ h0 = zeros(m,1);
 x0 = zeros(K,1);
 
 
-Train(book_data, book_chars, char_to_index, index_to_char, RNN);
+RNN = Train(book_data, book_chars, char_to_index, index_to_char, RNN);
 
 %RNN2 = RNN;
 %CheckGradients(book_data, book_chars, char_to_index, RNN2)
